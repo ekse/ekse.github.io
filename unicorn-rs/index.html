@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `unicorn` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, unicorn">
+
+    <title>unicorn - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'unicorn', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>unicorn</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-0' class='srclink' href='../src/unicorn/src/lib.rs.html#1-705' title='goto source code'>[src]</a></span></h1>
+<h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use <a class='mod' href='../unicorn/arm64_const/index.html' title='unicorn::arm64_const'>arm64_const</a>::*;</code></td></tr><tr><td><code>pub use <a class='mod' href='../unicorn/arm_const/index.html' title='unicorn::arm_const'>arm_const</a>::*;</code></td></tr><tr><td><code>pub use <a class='mod' href='../unicorn/m68k_const/index.html' title='unicorn::m68k_const'>m68k_const</a>::*;</code></td></tr><tr><td><code>pub use <a class='mod' href='../unicorn/mips_const/index.html' title='unicorn::mips_const'>mips_const</a>::*;</code></td></tr><tr><td><code>pub use <a class='mod' href='../unicorn/sparc_const/index.html' title='unicorn::sparc_const'>sparc_const</a>::*;</code></td></tr><tr><td><code>pub use <a class='mod' href='../unicorn/unicorn_const/index.html' title='unicorn::unicorn_const'>unicorn_const</a>::*;</code></td></tr><tr><td><code>pub use <a class='mod' href='../unicorn/x86_const/index.html' title='unicorn::x86_const'>x86_const</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='arm64_const/index.html'
+                               title='unicorn::arm64_const'>arm64_const</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='arm_const/index.html'
+                               title='unicorn::arm_const'>arm_const</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='ffi/index.html'
+                               title='unicorn::ffi'>ffi</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='m68k_const/index.html'
+                               title='unicorn::m68k_const'>m68k_const</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='mips_const/index.html'
+                               title='unicorn::mips_const'>mips_const</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='sparc_const/index.html'
+                               title='unicorn::sparc_const'>sparc_const</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='unicorn_const/index.html'
+                               title='unicorn::unicorn_const'>unicorn_const</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='x86_const/index.html'
+                               title='unicorn::x86_const'>x86_const</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.CpuARM64.html'
+                               title='unicorn::CpuARM64'>CpuARM64</a></td>
+                        <td class='docblock short'>
+                             <p>An ARM64 emulator instance.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.CpuM68K.html'
+                               title='unicorn::CpuM68K'>CpuM68K</a></td>
+                        <td class='docblock short'>
+                             <p>A M68K emulator instance.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.CpuMIPS.html'
+                               title='unicorn::CpuMIPS'>CpuMIPS</a></td>
+                        <td class='docblock short'>
+                             <p>A MIPS emulator instance.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.CpuSPARC.html'
+                               title='unicorn::CpuSPARC'>CpuSPARC</a></td>
+                        <td class='docblock short'>
+                             <p>A SPARC emulator instance.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.CpuX86.html'
+                               title='unicorn::CpuX86'>CpuX86</a></td>
+                        <td class='docblock short'>
+                             <p>An X86 emulator instance.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Unicorn.html'
+                               title='unicorn::Unicorn'>Unicorn</a></td>
+                        <td class='docblock short'>
+                             <p>Internal : A Unicorn emulator instance, use one of the Cpu structs instead.</p>
+                        </td>
+                    </tr>
+                </table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.BINDINGS_MAJOR.html'
+                               title='unicorn::BINDINGS_MAJOR'>BINDINGS_MAJOR</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.BINDINGS_MINOR.html'
+                               title='unicorn::BINDINGS_MINOR'>BINDINGS_MINOR</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='trait' href='trait.Cpu.html'
+                               title='unicorn::Cpu'>Cpu</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='trait' href='trait.Register.html'
+                               title='unicorn::Register'>Register</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.arch_supported.html'
+                               title='unicorn::arch_supported'>arch_supported</a></td>
+                        <td class='docblock short'>
+                             <p>Returns <code>true</code> if the architecture is supported by this build of unicorn.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.bindings_version.html'
+                               title='unicorn::bindings_version'>bindings_version</a></td>
+                        <td class='docblock short'>
+                             <p>Returns a tuple <code>(major, minor)</code> for the bindings version number.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.error_msg.html'
+                               title='unicorn::error_msg'>error_msg</a></td>
+                        <td class='docblock short'>
+                             <p>Returns a string for the specified error code.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.unicorn_version.html'
+                               title='unicorn::unicorn_version'>unicorn_version</a></td>
+                        <td class='docblock short'>
+                             <p>Returns a tuple <code>(major, minor)</code> for the unicorn version number.</p>
+                        </td>
+                    </tr>
+                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.uc_handle.html'
+                               title='unicorn::uc_handle'>uc_handle</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.uc_hook.html'
+                               title='unicorn::uc_hook'>uc_hook</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "unicorn";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
