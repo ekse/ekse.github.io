@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `RegisterARM` enum in crate `unicorn`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, RegisterARM">
+
+    <title>unicorn::arm_const::RegisterARM - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>unicorn</a>::<wbr><a href='index.html'>arm_const</a></p><script>window.sidebarCurrent = {name: 'RegisterARM', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content enum">
+<h1 class='fqn'><span class='in-band'>Enum <a href='../index.html'>unicorn</a>::<wbr><a href='index.html'>arm_const</a>::<wbr><a class='enum' href=''>RegisterARM</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-633' class='srclink' href='../../src/unicorn/src/arm_const.rs.html#4-116' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum RegisterARM {
+    INVALID,
+    APSR,
+    APSR_NZCV,
+    CPSR,
+    FPEXC,
+    FPINST,
+    FPSCR,
+    FPSCR_NZCV,
+    FPSID,
+    ITSTATE,
+    LR,
+    PC,
+    SP,
+    SPSR,
+    D0,
+    D1,
+    D2,
+    D3,
+    D4,
+    D5,
+    D6,
+    D7,
+    D8,
+    D9,
+    D10,
+    D11,
+    D12,
+    D13,
+    D14,
+    D15,
+    D16,
+    D17,
+    D18,
+    D19,
+    D20,
+    D21,
+    D22,
+    D23,
+    D24,
+    D25,
+    D26,
+    D27,
+    D28,
+    D29,
+    D30,
+    D31,
+    FPINST2,
+    MVFR0,
+    MVFR1,
+    MVFR2,
+    Q0,
+    Q1,
+    Q2,
+    Q3,
+    Q4,
+    Q5,
+    Q6,
+    Q7,
+    Q8,
+    Q9,
+    Q10,
+    Q11,
+    Q12,
+    Q13,
+    Q14,
+    Q15,
+    R0,
+    R1,
+    R2,
+    R3,
+    R4,
+    R5,
+    R6,
+    R7,
+    R8,
+    SB,
+    SL,
+    FP,
+    IP,
+    S0,
+    S1,
+    S2,
+    S3,
+    S4,
+    S5,
+    S6,
+    S7,
+    S8,
+    S9,
+    S10,
+    S11,
+    S12,
+    S13,
+    S14,
+    S15,
+    S16,
+    S17,
+    S18,
+    S19,
+    S20,
+    S21,
+    S22,
+    S23,
+    S24,
+    S25,
+    S26,
+    S27,
+    S28,
+    S29,
+    S30,
+    S31,
+}</pre><h2 class='variants'>Variants</h2>
+<table class='variants_table'><tr><td id='variant.INVALID'><code>INVALID</code></td><td></td><td></td></tr><tr><td id='variant.APSR'><code>APSR</code></td><td></td><td></td></tr><tr><td id='variant.APSR_NZCV'><code>APSR_NZCV</code></td><td></td><td></td></tr><tr><td id='variant.CPSR'><code>CPSR</code></td><td></td><td></td></tr><tr><td id='variant.FPEXC'><code>FPEXC</code></td><td></td><td></td></tr><tr><td id='variant.FPINST'><code>FPINST</code></td><td></td><td></td></tr><tr><td id='variant.FPSCR'><code>FPSCR</code></td><td></td><td></td></tr><tr><td id='variant.FPSCR_NZCV'><code>FPSCR_NZCV</code></td><td></td><td></td></tr><tr><td id='variant.FPSID'><code>FPSID</code></td><td></td><td></td></tr><tr><td id='variant.ITSTATE'><code>ITSTATE</code></td><td></td><td></td></tr><tr><td id='variant.LR'><code>LR</code></td><td></td><td></td></tr><tr><td id='variant.PC'><code>PC</code></td><td></td><td></td></tr><tr><td id='variant.SP'><code>SP</code></td><td></td><td></td></tr><tr><td id='variant.SPSR'><code>SPSR</code></td><td></td><td></td></tr><tr><td id='variant.D0'><code>D0</code></td><td></td><td></td></tr><tr><td id='variant.D1'><code>D1</code></td><td></td><td></td></tr><tr><td id='variant.D2'><code>D2</code></td><td></td><td></td></tr><tr><td id='variant.D3'><code>D3</code></td><td></td><td></td></tr><tr><td id='variant.D4'><code>D4</code></td><td></td><td></td></tr><tr><td id='variant.D5'><code>D5</code></td><td></td><td></td></tr><tr><td id='variant.D6'><code>D6</code></td><td></td><td></td></tr><tr><td id='variant.D7'><code>D7</code></td><td></td><td></td></tr><tr><td id='variant.D8'><code>D8</code></td><td></td><td></td></tr><tr><td id='variant.D9'><code>D9</code></td><td></td><td></td></tr><tr><td id='variant.D10'><code>D10</code></td><td></td><td></td></tr><tr><td id='variant.D11'><code>D11</code></td><td></td><td></td></tr><tr><td id='variant.D12'><code>D12</code></td><td></td><td></td></tr><tr><td id='variant.D13'><code>D13</code></td><td></td><td></td></tr><tr><td id='variant.D14'><code>D14</code></td><td></td><td></td></tr><tr><td id='variant.D15'><code>D15</code></td><td></td><td></td></tr><tr><td id='variant.D16'><code>D16</code></td><td></td><td></td></tr><tr><td id='variant.D17'><code>D17</code></td><td></td><td></td></tr><tr><td id='variant.D18'><code>D18</code></td><td></td><td></td></tr><tr><td id='variant.D19'><code>D19</code></td><td></td><td></td></tr><tr><td id='variant.D20'><code>D20</code></td><td></td><td></td></tr><tr><td id='variant.D21'><code>D21</code></td><td></td><td></td></tr><tr><td id='variant.D22'><code>D22</code></td><td></td><td></td></tr><tr><td id='variant.D23'><code>D23</code></td><td></td><td></td></tr><tr><td id='variant.D24'><code>D24</code></td><td></td><td></td></tr><tr><td id='variant.D25'><code>D25</code></td><td></td><td></td></tr><tr><td id='variant.D26'><code>D26</code></td><td></td><td></td></tr><tr><td id='variant.D27'><code>D27</code></td><td></td><td></td></tr><tr><td id='variant.D28'><code>D28</code></td><td></td><td></td></tr><tr><td id='variant.D29'><code>D29</code></td><td></td><td></td></tr><tr><td id='variant.D30'><code>D30</code></td><td></td><td></td></tr><tr><td id='variant.D31'><code>D31</code></td><td></td><td></td></tr><tr><td id='variant.FPINST2'><code>FPINST2</code></td><td></td><td></td></tr><tr><td id='variant.MVFR0'><code>MVFR0</code></td><td></td><td></td></tr><tr><td id='variant.MVFR1'><code>MVFR1</code></td><td></td><td></td></tr><tr><td id='variant.MVFR2'><code>MVFR2</code></td><td></td><td></td></tr><tr><td id='variant.Q0'><code>Q0</code></td><td></td><td></td></tr><tr><td id='variant.Q1'><code>Q1</code></td><td></td><td></td></tr><tr><td id='variant.Q2'><code>Q2</code></td><td></td><td></td></tr><tr><td id='variant.Q3'><code>Q3</code></td><td></td><td></td></tr><tr><td id='variant.Q4'><code>Q4</code></td><td></td><td></td></tr><tr><td id='variant.Q5'><code>Q5</code></td><td></td><td></td></tr><tr><td id='variant.Q6'><code>Q6</code></td><td></td><td></td></tr><tr><td id='variant.Q7'><code>Q7</code></td><td></td><td></td></tr><tr><td id='variant.Q8'><code>Q8</code></td><td></td><td></td></tr><tr><td id='variant.Q9'><code>Q9</code></td><td></td><td></td></tr><tr><td id='variant.Q10'><code>Q10</code></td><td></td><td></td></tr><tr><td id='variant.Q11'><code>Q11</code></td><td></td><td></td></tr><tr><td id='variant.Q12'><code>Q12</code></td><td></td><td></td></tr><tr><td id='variant.Q13'><code>Q13</code></td><td></td><td></td></tr><tr><td id='variant.Q14'><code>Q14</code></td><td></td><td></td></tr><tr><td id='variant.Q15'><code>Q15</code></td><td></td><td></td></tr><tr><td id='variant.R0'><code>R0</code></td><td></td><td></td></tr><tr><td id='variant.R1'><code>R1</code></td><td></td><td></td></tr><tr><td id='variant.R2'><code>R2</code></td><td></td><td></td></tr><tr><td id='variant.R3'><code>R3</code></td><td></td><td></td></tr><tr><td id='variant.R4'><code>R4</code></td><td></td><td></td></tr><tr><td id='variant.R5'><code>R5</code></td><td></td><td></td></tr><tr><td id='variant.R6'><code>R6</code></td><td></td><td></td></tr><tr><td id='variant.R7'><code>R7</code></td><td></td><td></td></tr><tr><td id='variant.R8'><code>R8</code></td><td></td><td></td></tr><tr><td id='variant.SB'><code>SB</code></td><td></td><td></td></tr><tr><td id='variant.SL'><code>SL</code></td><td></td><td></td></tr><tr><td id='variant.FP'><code>FP</code></td><td></td><td></td></tr><tr><td id='variant.IP'><code>IP</code></td><td></td><td></td></tr><tr><td id='variant.S0'><code>S0</code></td><td></td><td></td></tr><tr><td id='variant.S1'><code>S1</code></td><td></td><td></td></tr><tr><td id='variant.S2'><code>S2</code></td><td></td><td></td></tr><tr><td id='variant.S3'><code>S3</code></td><td></td><td></td></tr><tr><td id='variant.S4'><code>S4</code></td><td></td><td></td></tr><tr><td id='variant.S5'><code>S5</code></td><td></td><td></td></tr><tr><td id='variant.S6'><code>S6</code></td><td></td><td></td></tr><tr><td id='variant.S7'><code>S7</code></td><td></td><td></td></tr><tr><td id='variant.S8'><code>S8</code></td><td></td><td></td></tr><tr><td id='variant.S9'><code>S9</code></td><td></td><td></td></tr><tr><td id='variant.S10'><code>S10</code></td><td></td><td></td></tr><tr><td id='variant.S11'><code>S11</code></td><td></td><td></td></tr><tr><td id='variant.S12'><code>S12</code></td><td></td><td></td></tr><tr><td id='variant.S13'><code>S13</code></td><td></td><td></td></tr><tr><td id='variant.S14'><code>S14</code></td><td></td><td></td></tr><tr><td id='variant.S15'><code>S15</code></td><td></td><td></td></tr><tr><td id='variant.S16'><code>S16</code></td><td></td><td></td></tr><tr><td id='variant.S17'><code>S17</code></td><td></td><td></td></tr><tr><td id='variant.S18'><code>S18</code></td><td></td><td></td></tr><tr><td id='variant.S19'><code>S19</code></td><td></td><td></td></tr><tr><td id='variant.S20'><code>S20</code></td><td></td><td></td></tr><tr><td id='variant.S21'><code>S21</code></td><td></td><td></td></tr><tr><td id='variant.S22'><code>S22</code></td><td></td><td></td></tr><tr><td id='variant.S23'><code>S23</code></td><td></td><td></td></tr><tr><td id='variant.S24'><code>S24</code></td><td></td><td></td></tr><tr><td id='variant.S25'><code>S25</code></td><td></td><td></td></tr><tr><td id='variant.S26'><code>S26</code></td><td></td><td></td></tr><tr><td id='variant.S27'><code>S27</code></td><td></td><td></td></tr><tr><td id='variant.S28'><code>S28</code></td><td></td><td></td></tr><tr><td id='variant.S29'><code>S29</code></td><td></td><td></td></tr><tr><td id='variant.S30'><code>S30</code></td><td></td><td></td></tr><tr><td id='variant.S31'><code>S31</code></td><td></td><td></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../../unicorn/trait.Register.html' title='unicorn::Register'>Register</a> for <a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a></code></h3><div class='impl-items'><h4 id='method.to_i32' class='method'><code>fn <a href='../../unicorn/trait.Register.html#method.to_i32' class='fnname'>to_i32</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a></code></h4>
+<h4 id='method.clone_from' class='method'><span class="since">1.0.0</span><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../../unicorn/arm_const/enum.RegisterARM.html' title='unicorn::arm_const::RegisterARM'>RegisterARM</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "unicorn";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["MILISECOND_SCALE",""],["PROT_ALL",""],["PROT_EXEC",""],["PROT_NONE",""],["PROT_READ",""],["PROT_WRITE",""],["SECOND_SCALE",""]],"enum":[["Arch",""],["Error",""],["HookType",""],["MemType",""],["Mode",""],["Query",""]],"struct":[["MemRegion",""],["Protection",""]]});
