@@ -24,9 +24,12 @@ github_username:  jekyll
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-hydeout
+#theme: jekyll-theme-hydeout
+theme: minima
 plugins:
   - jekyll-feed
+
+plugins: [jekyll-paginate]
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
