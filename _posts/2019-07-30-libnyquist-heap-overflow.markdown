@@ -9,6 +9,7 @@ categories: fuzzing
 
 [libnyquist](https://github.com/ddiakopoulos/libnyquist) is a cross platform C++11 library for decoding audio (mp3, wav, ogg, opus, flac, etc). A heap overflow can happen in VorbisDecoderInternal::readInternal when the library attempts to read more frames than the allocated capacity of `AudioData->samples`.
 
+github issue: [https://github.com/ddiakopoulos/libnyquist/issues/40](https://github.com/ddiakopoulos/libnyquist/issues/40)  
 crash input: [crash-7f190cd04b5fbf6f813db4447b5010e63867fe6a.ogg](https://drive.google.com/open?id=10xpTDUrHzJLFknsY4bF8333YpvnMHZJc)
 
 For reference, the fuzzer can be found on my [fuzzing](https://github.com/ekse/libnyquist/tree/fuzzing) branch. The provided sample also crashes the sample `libnyquist-examples` that is provided with libnyquist.
