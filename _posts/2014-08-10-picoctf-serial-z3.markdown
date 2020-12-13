@@ -2,7 +2,7 @@
 layout: post
 title:  "Solving picoCTF 2013 Harder Serial with Z3"
 date:   2014-08-10 00:00:00 -0400
-categories: ctf,exploits
+categories: ctf
 ---
 
 In the past weeks I have been watching LiveCTF, a project to livestream speedruns of wargames and CTF challenges. This is a great learning tool as you get to see the thought process of the caster as well as the tools and tricks they use to solve the challenges. 

