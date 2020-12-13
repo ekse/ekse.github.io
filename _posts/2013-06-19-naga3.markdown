@@ -481,7 +481,7 @@ If we look at the output of the map_address.py script, we see that we can have m
 
 Another approach would be to use a ROP payload to set the memory region where we put our shellcode executable, but that is somewhat complicated and I'm lazy so I kept looking for an easier way. I reviewed what could be overwritten in the memory and thought about the commands in the Measurements table. We could probably overwrite one of the commands and have it execute what we want, but that doesn't work either as it's the commands in the child address space that are executed... and then it all became clear.
 
-![naga9](/assets/naga9.png)
+![naga9](/assets/naga9.jpg)
 
 All we need to do is to redirect execution to `make_measurements()` so that it is executed in the parent process. This way we can use another command that is called by `system()` (I used `md5sum`) to copy the flag. The final setup of our exploit is like this:
 
