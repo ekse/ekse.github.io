@@ -64,7 +64,7 @@ feed_in_blog_section = true      # Whether to make feed file in blog section, ur
 #============== Some feature switches ================================
 toc = true                       # Whether to show Table-Of-Contents [Can be overridden by page config]
 blur_effect = true               # Whether to turn on blur effect on navigation bar
-back_to_top_button = true        # Whether to show Back-To-Top button
+back_to_top_button = false        # Whether to show Back-To-Top button
 progress_bar = true              # Whether to show reading progress bar
 cc_license = false               # Whether to show Creative-Commons statement [Can be overridden by page config]
 cc_license_statement = "This work is licensed under [CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/)."  # The Creative-Commons statement
