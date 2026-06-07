@@ -2,7 +2,7 @@
 #================ Docs: https://github.com/isunjn/serene/wiki ============================
 #=========================================================================================
 
-base_url = "https://ekse.pages.dev" # The domain of your site
+base_url = "https://ekse.github.io" # The domain of your site
 title = "Security and stuff"
 description = ""
 default_language = "en"
@@ -54,7 +54,7 @@ toc_icon = "ri-menu-2-line"
 #============== Social media links =================================
 links = [
     {name = "GitHub", icon = "ri-github-line", url = "https://github.com/ekse"},
-    {name = "Mastodon", icon = "ri-mastodon-line", url = "https://noc.social/@ekse"},
+    {name = "Mastodon", icon = "ri-mastodon-line", url = "https://infosec.exchange/@ekse"},
     {name = "Bluesky", icon = "ri-bluesky-line", url = "https://bsky.app/profile/sduquette.bsky.social"}
 ]
 
