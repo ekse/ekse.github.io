@@ -73,6 +73,8 @@ warning: ignoring `registry.global-min-publish-age` without `-Zmin-publish-age`
    Compiling cooldown_test v0.1.0 (/home/ekse/cooldown_test)
 ```
 
+ Overall I find that the design is very reasonable. The hierarchical resolution of cargo configuration files will make it possible to set the cooldown at the root of a monorepo and have it apply to all projects. I would have liked to be able to set exclusions for internal packages as those are likely to be updated frequently and can be a source of friction. The cargo team opted not to support them yet and provide reasonable arguments why in the [min-publish-age RFC](https://github.com/rust-lang/rfcs/blob/main/text/3923-cargo-min-publish-age.md#exclude-list). 
+
 Documentation:
 
 - [https://doc.rust-lang.org/nightly/cargo/reference/config.html#registryglobal-min-publish-age](https://doc.rust-lang.org/nightly/cargo/reference/config.html#registryglobal-min-publish-age)
