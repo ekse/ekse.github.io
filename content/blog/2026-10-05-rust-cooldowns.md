@@ -9,8 +9,6 @@ tags = ["rust", "cooldowns"]
 
 +++
 
-# Dependency cooldowns in rust
-
 Rust is adding dependency cooldowns in version 1.100. Cooldowns have emerged as a defense against supply chain attacks ([cooldowns.dev](https://cooldowns.dev/)). The concept is simple but effective: Let's wait a couple days before installing newly published versions of packages. See [We should all be using dependency cooldowns](https://blog.yossarian.net/2025/11/21/) for arguments in favor of them.
 
 Cooldowns are configured with the `min-publish-age` option in `.cargo/config.toml`. The [cargo configuration](https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure) is resolved from multiple locations which brings a lot of flexibility, cooldowns can be configured globally in the user home folder, or in the project folder to apply for all contributors.
